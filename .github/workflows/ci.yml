@@ -1,0 +1,47 @@
+name: CI
+
+on:
+    push:
+        branches: [main]
+    pull_request:
+
+jobs:
+    tests:
+        name: PHP ${{ matrix.php }} / Contao ${{ matrix.contao }}
+        runs-on: ubuntu-latest
+        strategy:
+            fail-fast: false
+            matrix:
+                include:
+                    - php: '8.1'
+                      contao: '^4.13'
+                    - php: '8.2'
+                      contao: '^5.3'
+                    - php: '8.3'
+                      contao: '^5.7'
+                    - php: '8.4'
+                      contao: '^5.7'
+                    # PHP 8.5 ist neu — Vorab-Test, blockiert das Release nicht
+                    - php: '8.5'
+                      contao: '^5.7'
+                      experimental: true
+        continue-on-error: ${{ matrix.experimental == true }}
+        steps:
+            - uses: actions/checkout@v4
+
+            - uses: shivammathur/setup-php@v2
+              with:
+                  php-version: ${{ matrix.php }}
+                  # contao/core-bundle requires these (notably gd + intl,
+                  # which are not preinstalled for every PHP version)
+                  extensions: dom, fileinfo, gd, intl, pdo, zlib
+                  coverage: none
+
+            - name: Pin Contao version
+              run: composer require "contao/core-bundle:${{ matrix.contao }}" --no-update --no-interaction
+
+            - name: Install dependencies
+              run: composer update --prefer-dist --no-interaction --no-progress
+
+            - name: Run tests
+              run: vendor/bin/phpunit

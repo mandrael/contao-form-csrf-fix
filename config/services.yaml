@@ -1,0 +1,15 @@
+parameters:
+    # Set to true to add an "X-Contao-Csrf-Fix: 1" header to affected responses
+    # (useful to verify the bundle is working, e.g. with curl).
+    contao_form_csrf_fix.diagnostic_header: false
+
+services:
+    # The kernel.event_listener tag is added by ContaoFormCsrfFixExtension,
+    # which computes the priority from the core CsrfTokenCookieSubscriber at
+    # container compile time (it differs across Contao versions).
+    Mandrael\ContaoFormCsrfFix\EventListener\EnsureCsrfCookieOnFormPagesListener:
+        arguments:
+            - '@contao.csrf.token_manager'
+            - '@contao.routing.scope_matcher'
+            - '%contao.csrf_cookie_prefix%'
+            - '%contao_form_csrf_fix.diagnostic_header%'

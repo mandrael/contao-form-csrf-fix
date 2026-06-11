@@ -1,0 +1,56 @@
+{
+    "name": "mandrael/contao-form-csrf-fix",
+    "type": "contao-bundle",
+    "description": "Behebt das Problem \"Ungültiges Anfrage-Token\" (HTTP 400), auf das Erstbesucher beim Absenden eines Contao-Formulars stoßen können (contao/contao#2820). Rein serverseitig, ohne JavaScript.",
+    "keywords": [
+        "contao",
+        "csrf",
+        "request token",
+        "invalid request token",
+        "ungueltiges anfrage-token",
+        "form",
+        "double submit cookie"
+    ],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Michael Gasperl",
+            "homepage": "https://www.nkinstitute.at"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/mandrael/contao-form-csrf-fix/issues",
+        "source": "https://github.com/mandrael/contao-form-csrf-fix"
+    },
+    "require": {
+        "php": "^8.1",
+        "contao/core-bundle": "^4.13 || ^5.0"
+    },
+    "require-dev": {
+        "contao/manager-plugin": "^2.0",
+        "phpunit/phpunit": "^10.5 || ^11.0 || ^12.0"
+    },
+    "conflict": {
+        "contao/manager-plugin": "<2.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Mandrael\\ContaoFormCsrfFix\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Mandrael\\ContaoFormCsrfFix\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "contao-manager-plugin": "Mandrael\\ContaoFormCsrfFix\\ContaoManager\\Plugin"
+    },
+    "config": {
+        "allow-plugins": {
+            "contao-components/installer": false,
+            "contao/manager-plugin": false,
+            "php-http/discovery": false
+        }
+    }
+}
